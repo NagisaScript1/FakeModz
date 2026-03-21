@@ -1,1 +1,106 @@
-loadstring(game:HttpGet("https://pastefy.app/p5NuQwrS/raw"))()
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+
+-- Main frame
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 260, 0, 120)
+frame.Position = UDim2.new(0.05, 0, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
+frame.Active = true
+frame.Draggable = true
+frame.BorderSizePixel = 0
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+
+-- Title (UPDATED)
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, -40, 0, 25)
+title.Position = UDim2.new(0, 10, 0, 5)
+title.Text = "Nagisa Hub"
+title.TextColor3 = Color3.fromRGB(200, 220, 255)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.TextScaled = true
+
+-- Store toggle containers
+local toggles = {}
+
+local function createToggle(yPos, text)
+    local container = Instance.new("Frame", frame)
+    container.Size = UDim2.new(1, -20, 0, 35)
+    container.Position = UDim2.new(0, 10, 0, yPos)
+    container.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
+    container.BorderSizePixel = 0
+    Instance.new("UICorner", container).CornerRadius = UDim.new(0, 10)
+
+    local label = Instance.new("TextLabel", container)
+    label.Size = UDim2.new(0.7, 0, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Text = text
+    label.TextColor3 = Color3.new(1,1,1)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.Gotham
+    label.TextScaled = true
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local toggleBtn = Instance.new("TextButton", container)
+    toggleBtn.Size = UDim2.new(0, 45, 0, 20)
+    toggleBtn.Position = UDim2.new(1, -55, 0.5, -10)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    toggleBtn.Text = ""
+    Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+
+    local circle = Instance.new("Frame", toggleBtn)
+    circle.Size = UDim2.new(0, 18, 0, 18)
+    circle.Position = UDim2.new(0, 1, 0.5, -9)
+    circle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
+
+    local enabled = false
+
+    toggleBtn.MouseButton1Click:Connect(function()
+        enabled = not enabled
+        if enabled then
+            toggleBtn.BackgroundColor3 = Color3.fromRGB(70,130,255)
+            circle.Position = UDim2.new(1, -19, 0.5, -9)
+        else
+            toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+            circle.Position = UDim2.new(0, 1, 0.5, -9)
+        end
+    end)
+
+    table.insert(toggles, container)
+end
+
+createToggle(35, "Freeze Trade")
+createToggle(75, "Force Accept")
+
+-- Close button
+local close = Instance.new("TextButton", frame)
+close.Size = UDim2.new(0, 20, 0, 20)
+close.Position = UDim2.new(1, -25, 0, 5)
+close.Text = "-"
+close.BackgroundColor3 = Color3.fromRGB(120, 80, 60)
+close.TextColor3 = Color3.new(1,1,1)
+
+local open = true
+close.MouseButton1Click:Connect(function()
+    open = not open
+    
+    if open then
+        frame.Size = UDim2.new(0, 260, 0, 120)
+        close.Text = "-"
+        
+        for _, t in ipairs(toggles) do
+            t.Visible = true
+        end
+    else
+        frame.Size = UDim2.new(0, 260, 0, 35)
+        close.Text = "+"
+        
+        for _, t in ipairs(toggles) do
+            t.Visible = false
+        end
+    end
+end)
